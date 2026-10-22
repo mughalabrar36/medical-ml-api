@@ -1,42 +1,46 @@
-# Breast Cancer Prediction API (FastAPI + scikit-learn)
+# Breast Cancer Prediction (Flask + scikit-learn)
 
-A REST API that serves a Random Forest model for real-time predictions
-(malignant / benign) from tumor measurements.
+A Flask web app and REST API that serves a Random Forest model for real-time
+predictions (malignant / benign) from tumor measurements.
 
-- **Dataset:** Breast_cancer_dataset.csv (569 patients, 10 mean tumor measurements as inputs)
+- **Dataset:** Breast_cancer_dataset.csv (569 patients, 10 mean tumor measurements)
 - **Model:** StandardScaler + RandomForestClassifier (~94% test accuracy)
-- **Framework:** FastAPI, validated with Pydantic
-- **Deployment:** Vercel
+- **Backend:** Flask (model loaded once at startup, input validated on every request)
+- **Frontend:** single responsive HTML page (`templates/index.html`)
+- **Deployment:** Vercel (`vercel.json`)
+
+## Project structure
+| File | Purpose |
+|------|---------|
+| `app.py` | Flask app: web page + API |
+| `ml.py` | Field definitions, data loading, model training/loading |
+| `train.py` | Trains the model and saves `model.joblib` |
+| `templates/index.html` | The web interface |
+| `vercel.json` | Vercel deployment config |
+| `test_app.py` | Automated tests |
 
 ## Run locally
 ```bash
 pip install -r requirements.txt
-python train.py                  # creates model.joblib
-uvicorn main:app --reload        # open http://127.0.0.1:8000/docs
+python train.py        # creates model.joblib
+python app.py          # open http://127.0.0.1:5000
 ```
 
-## Endpoints
+## API
 | Method | Path | Description |
 |--------|------|-------------|
-| GET | `/` | Welcome message |
+| GET | `/` | Web interface |
 | GET | `/health` | Health check |
-| POST | `/predict` | Returns prediction + probabilities |
+| POST | `/predict` | JSON in, prediction + probabilities out |
 
-Example request:
 ```bash
-curl -X POST http://127.0.0.1:8000/predict -H "Content-Type: application/json" -d @sample.json
+curl -X POST http://127.0.0.1:5000/predict -H "Content-Type: application/json" -d @sample.json
 ```
-
-## Run with Docker
-```bash
-docker build -t medical-api .
-docker run -p 8000:8000 medical-api
-```
+Invalid or missing values return HTTP 400 with a list of problems.
 
 ## Deploy on Vercel (free)
 1. Push this folder to a GitHub repo.
-2. On vercel.com: Add New > Project > import the repo.
-3. Framework preset: **FastAPI** (or Other). Click **Deploy**.
-4. Open `https://<your-project>.vercel.app/docs`.
+2. On vercel.com: Add New > Project > import the repo > Deploy.
+3. Open `https://<your-project>.vercel.app`.
 
 *Disclaimer: educational project, not for real medical diagnosis.*
