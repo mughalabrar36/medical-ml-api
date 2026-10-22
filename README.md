@@ -6,7 +6,7 @@ A REST API that serves a Random Forest model for real-time predictions
 - **Dataset:** Breast_cancer_dataset.csv (569 patients, 10 mean tumor measurements as inputs)
 - **Model:** StandardScaler + RandomForestClassifier (~94% test accuracy)
 - **Framework:** FastAPI, validated with Pydantic
-- **Deployment:** Docker / Render
+- **Deployment:** Vercel
 
 ## Run locally
 ```bash
@@ -33,10 +33,10 @@ docker build -t medical-api .
 docker run -p 8000:8000 medical-api
 ```
 
-## Deploy on Render (free)
+## Deploy on Vercel (free)
 1. Push this folder to a GitHub repo.
-2. On render.com: New > Web Service > connect the repo.
-3. Runtime: **Docker** (it detects the Dockerfile). Create the service.
-4. Open `https://<your-app>.onrender.com/docs`.
+2. On vercel.com: Add New > Project > import the repo.
+3. Framework preset: **FastAPI** (or Other). Click **Deploy**.
+4. Open `https://<your-project>.vercel.app/docs`.
 
 *Disclaimer: educational project, not for real medical diagnosis.*
