@@ -1,8 +1,9 @@
 """FastAPI service for real-time breast cancer prediction."""
-import joblib
-import pandas as pd
+import numpy as np
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
+
+from ml import get_model
 
 app = FastAPI(
     title="Breast Cancer Prediction API",
@@ -10,12 +11,7 @@ app = FastAPI(
     version="1.0.0",
 )
 
-model = joblib.load("model.joblib")
-FEATURES = [
-    "radius_mean", "texture_mean", "perimeter_mean", "area_mean",
-    "smoothness_mean", "compactness_mean", "concavity_mean",
-    "concave points_mean", "symmetry_mean", "fractal_dimension_mean",
-]
+model = get_model()
 
 
 class PatientData(BaseModel):
@@ -46,7 +42,7 @@ def predict(p: PatientData):
     values = [p.radius_mean, p.texture_mean, p.perimeter_mean, p.area_mean,
               p.smoothness_mean, p.compactness_mean, p.concavity_mean,
               p.concave_points_mean, p.symmetry_mean, p.fractal_dimension_mean]
-    df = pd.DataFrame([values], columns=FEATURES)
+    df = np.array([values])
     pred = int(model.predict(df)[0])
     proba = model.predict_proba(df)[0]
     return {
