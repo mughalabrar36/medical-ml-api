@@ -2,9 +2,10 @@
 import math
 
 import numpy as np
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template_string, request
 
 from ml import FIELDS, example_dicts, get_model
+from page import HTML
 
 app = Flask(__name__)
 app.json.sort_keys = False
@@ -30,7 +31,7 @@ def parse_input(data):
 
 @app.get("/")
 def home():
-    return render_template("index.html", fields=FIELDS, examples=example_dicts())
+    return render_template_string(HTML, fields=FIELDS, examples=example_dicts())
 
 
 @app.get("/health")

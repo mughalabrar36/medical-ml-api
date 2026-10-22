@@ -6,7 +6,7 @@
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "250mb",
-        "includeFiles": ["model.joblib", "Breast_cancer_dataset.csv", "ml.py", "templates/**"]
+        "includeFiles": ["model.joblib", "Breast_cancer_dataset.csv", "ml.py", "page.py"]
       }
     }
   ],
